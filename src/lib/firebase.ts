@@ -1,5 +1,14 @@
 import { initializeApp } from 'firebase/app';
-import { getAuth, GoogleAuthProvider, signInWithPopup, signOut } from 'firebase/auth';
+import { 
+  getAuth, 
+  initializeAuth, 
+  browserLocalPersistence, 
+  browserSessionPersistence, 
+  inMemoryPersistence, 
+  GoogleAuthProvider, 
+  signInWithPopup, 
+  signOut 
+} from 'firebase/auth';
 import { initializeFirestore, doc, getDoc, getDocFromServer } from 'firebase/firestore';
 import firebaseConfig from '../../firebase-applet-config.json';
 
@@ -8,7 +17,66 @@ export const db = initializeFirestore(app, {
   experimentalForceLongPolling: true,
   useFetchStreams: false
 } as any, firebaseConfig.firestoreDatabaseId); // Using the correct databaseId and enabling long-polling for reliable connections in sandboxed iframes
-export const auth = getAuth(app);
+
+const determineAuth = () => {
+  if (typeof window === 'undefined') {
+    return getAuth(app);
+  }
+
+  // Check if we can safely use local storage
+  let hasStorage = false;
+  try {
+    localStorage.setItem('__firebase_test__', '1');
+    localStorage.removeItem('__firebase_test__');
+    hasStorage = true;
+  } catch (e) {
+    console.warn("Storage access is restricted in this environment. Falling back to memory/session persistence.");
+  }
+
+  const isIframe = window.self !== window.top;
+
+  if (isIframe || !hasStorage) {
+    try {
+      // In sandboxed frames (like Google AI Studio preview), indexedDB/localStorage can fail.
+      // We initialize with session and memory persistence bypasses the buggy IndexedDB check.
+      return initializeAuth(app, {
+        persistence: [browserSessionPersistence, inMemoryPersistence]
+      });
+    } catch (e) {
+      console.warn("initializeAuth with session persistence fallback failed:", e);
+      try {
+        return initializeAuth(app, {
+          persistence: inMemoryPersistence
+        });
+      } catch (err) {
+        console.warn("initializeAuth failed entirely, using standard getAuth registry fallback:", err);
+        return getAuth(app);
+      }
+    }
+  }
+
+  try {
+    // Normal environment, try standard getAuth first
+    return getAuth(app);
+  } catch (e) {
+    console.warn("Standard getAuth failed, initializing with full persistence array fallback:", e);
+    try {
+      return initializeAuth(app, {
+        persistence: [browserLocalPersistence, browserSessionPersistence, inMemoryPersistence]
+      });
+    } catch (err) {
+      try {
+        return initializeAuth(app, {
+          persistence: inMemoryPersistence
+        });
+      } catch (finalErr) {
+        return getAuth(app);
+      }
+    }
+  }
+};
+
+export const auth = determineAuth();
 export const googleProvider = new GoogleAuthProvider();
 
 export enum OperationType {
