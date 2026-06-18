@@ -1,10 +1,10 @@
 {
-  "projectId": "custom-polymer-7tn3v",
-  "appId": "1:785486326080:web:c95ec6fbb942153a2672a5",
-  "apiKey": "AIzaSyD3woBgidY5GPrXRvhMvENgRUMABsOjUz0",
-  "authDomain": "custom-polymer-7tn3v.firebaseapp.com",
-  "firestoreDatabaseId": "remixed-firestore-database-id",
-  "storageBucket": "custom-polymer-7tn3v.firebasestorage.app",
-  "messagingSenderId": "785486326080",
+  "projectId": "studyverse-60b0f",
+  "appId": "1:373010985206:web:9f290931e878d2624a3cd7",
+  "apiKey": "AIzaSyDQPjQfIENbXA8zm-DvjYX0LU6eN-xL67U",
+  "authDomain": "studyverse-60b0f.firebaseapp.com",
+  "firestoreDatabaseId": "(default)",
+  "storageBucket": "studyverse-60b0f.firebasestorage.app",
+  "messagingSenderId": "373010985206",
   "measurementId": ""
 }
