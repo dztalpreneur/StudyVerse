@@ -1,0 +1,164 @@
+{
+  "entities": {
+    "studentProfile": {
+      "title": "Student Profile",
+      "description": "Information about the logged-in student, their class grade, and subject preferences",
+      "type": "object",
+      "properties": {
+        "userId": {
+          "type": "string",
+          "description": "Unique user ID matching the authenticated Firebase user"
+        },
+        "name": {
+          "type": "string",
+          "description": "Student's display name"
+        },
+        "grade": {
+          "type": "string",
+          "description": "Active grade category of the student"
+        },
+        "subject": {
+          "type": "string",
+          "description": "Active subject of interest"
+        },
+        "board": {
+          "type": "string",
+          "description": "Selectable educational board (e.g. CBSE, ICSE, State Board)"
+        },
+        "mediumOfLearning": {
+          "type": "string",
+          "description": "Preferred language for interaction (e.g. English, Hindi, Hinglish)"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of the last update"
+        }
+      },
+      "required": ["userId", "name", "grade", "subject", "updatedAt"]
+    },
+    "classSession": {
+      "title": "Classroom Session",
+      "description": "An interactive classroom session with blackboard state, active syllabus document, and session metadata",
+      "type": "object",
+      "properties": {
+        "sessionId": {
+          "type": "string",
+          "description": "Unique session ID generated on startup"
+        },
+        "userId": {
+          "type": "string",
+          "description": "Owner userId of the session"
+        },
+        "grade": {
+          "type": "string",
+          "description": "Grade tier for this session"
+        },
+        "subject": {
+          "type": "string",
+          "description": "Subject studied during this session"
+        },
+        "activeDocumentName": {
+          "type": "string",
+          "description": "Name of the active syllabus document, if any"
+        },
+        "customBoardContent": {
+          "type": "string",
+          "description": "Current blackboard chalk and neon diagram state"
+        },
+        "createdAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when the session was created"
+        },
+        "updatedAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of the last session state modification"
+        }
+      },
+      "required": ["sessionId", "userId", "grade", "subject", "createdAt", "updatedAt"]
+    },
+    "dialogueMessage": {
+      "title": "Dialogue Message",
+      "description": "A transcripts of verbal communication exchanged during the session between the student and Cherry Ma'am",
+      "type": "object",
+      "properties": {
+        "messageId": {
+          "type": "string",
+          "description": "Unique identifier of the transcription message block"
+        },
+        "sessionId": {
+          "type": "string",
+          "description": "Session ID this message belongs to"
+        },
+        "sender": {
+          "type": "string",
+          "enum": ["user", "cherry"],
+          "description": "Sender segment"
+        },
+        "text": {
+          "type": "string",
+          "description": "Verbal transcript sentence or response block"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Time of transcription"
+        }
+      },
+      "required": ["messageId", "sessionId", "sender", "text", "timestamp"]
+    },
+    "boardSnapshot": {
+      "title": "Board Snapshot",
+      "description": "Whiteboard image snapshots with custom topic titles and descriptions saved to student profiles.",
+      "type": "object",
+      "properties": {
+        "snapshotId": {
+          "type": "string",
+          "description": "Unique snapshot ID generated on creation"
+        },
+        "userId": {
+          "type": "string",
+          "description": "Owner userId of this snapshot"
+        },
+        "topicTitle": {
+          "type": "string",
+          "description": "Title of the board topic discussed"
+        },
+        "description": {
+          "type": "string",
+          "description": "Short description of the topic discussed"
+        },
+        "imgData": {
+          "type": "string",
+          "description": "Compressed Base64 JPEG data representing the blackboard snapshot"
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Time when the snapshot was stored"
+        }
+      },
+      "required": ["snapshotId", "userId", "topicTitle", "description", "imgData", "timestamp"]
+    }
+  },
+  "firestore": {
+    "/studentProfiles/{userId}": {
+      "schema": "studentProfile",
+      "description": "Stores user-specific settings matching their UID"
+    },
+    "/studentProfiles/{userId}/boardSnapshots/{snapshotId}": {
+      "schema": "boardSnapshot",
+      "description": "Whiteboard image snapshots and descriptions saved under specific student profiles"
+    },
+    "/classSessions/{sessionId}": {
+      "schema": "classSession",
+      "description": "Main collection storing classroom sessions"
+    },
+    "/classSessions/{sessionId}/dialogueMessages/{messageId}": {
+      "schema": "dialogueMessage",
+      "description": "Subcollection holding full historical chat/vocal transcript dialogue histories"
+    }
+  }
+}

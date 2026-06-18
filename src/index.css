@@ -1,0 +1,114 @@
+@import url('https://fonts.googleapis.com/css2?family=Delius&family=Space+Grotesk:wght@400;500;600;700&display=swap');
+@import "tailwindcss";
+@import "katex/dist/katex.min.css";
+
+/* Blackboard Chalkboard Themes & Textures */
+.blackboard-chalk {
+  background-color: #0c201a;
+  background-image: 
+    radial-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
+    linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+  background-size: 24px 24px, 120px 120px, 120px 120px;
+  background-position: center;
+  box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.85);
+  border: 12px solid #2e1a05; /* Wooden Board outline frame */
+  border-radius: 8px;
+  position: relative;
+}
+
+/* Simulate realistic slate dust overlay */
+.blackboard-chalk::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 40% 60%, rgba(255, 255, 255, 0.03) 0%, transparent 80%);
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* Chalky fonts & handwriting simulation */
+.chalk-font {
+  font-family: "Delius", "Comic Sans MS", "Chalkboard SE", "Marker Felt", sans-serif;
+}
+
+.chalk-text-white {
+  color: rgba(245, 245, 245, 0.95);
+  text-shadow: 0 0 2px rgba(255, 255, 255, 0.3), 0 0 4px rgba(255, 255, 255, 0.1);
+}
+
+.chalk-text-yellow {
+  color: rgba(253, 224, 71, 0.95);
+  text-shadow: 0 0 2px rgba(253, 224, 71, 0.3), 0 0 4px rgba(253, 224, 71, 0.1);
+}
+
+.chalk-text-rose {
+  color: rgba(244, 114, 182, 0.95);
+  text-shadow: 0 0 2px rgba(244, 114, 182, 0.3), 0 0 4px rgba(244, 114, 182, 0.1);
+}
+
+.chalk-text-emerald {
+  color: rgba(52, 211, 153, 0.95);
+  text-shadow: 0 0 2px rgba(52, 211, 153, 0.3), 0 0 4px rgba(52, 211, 153, 0.1);
+}
+
+@keyframes fadeInChalk {
+  from {
+    opacity: 0;
+    filter: blur(1px);
+    transform: scale(0.99);
+  }
+  to {
+    opacity: 1;
+    filter: blur(0);
+    transform: scale(1);
+  }
+}
+
+@keyframes pulseSlow {
+  0%, 100% {
+    opacity: 0.95;
+    transform: scale(1);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1.01);
+  }
+}
+
+.animate-chalk-fade {
+  animation: fadeInChalk 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+.animate-pulse-slow {
+  animation: pulseSlow 3s infinite ease-in-out;
+}
+
+/* Custom equalizing bouncy waves */
+@keyframes bounceCustom {
+  0%, 100% {
+    transform: scaleY(0.4);
+  }
+  50% {
+    transform: scaleY(1.5);
+  }
+}
+
+.animate-bounce-custom-1 {
+  animation: bounceCustom 0.7s ease-in-out infinite;
+  transform-origin: bottom;
+}
+
+.animate-bounce-custom-2 {
+  animation: bounceCustom 0.7s ease-in-out infinite 0.2s;
+  transform-origin: bottom;
+}
+
+.animate-bounce-custom-3 {
+  animation: bounceCustom 0.7s ease-in-out infinite 0.4s;
+  transform-origin: bottom;
+}
+
+
+
+

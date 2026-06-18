@@ -1,0 +1,48 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    
+    // Global safety net: deny everything by default
+    match /{document=**} {
+      allow read, write: if false;
+    }
+
+    // Helper to check if user is signed in
+    function isSignedIn() {
+      return request.auth != null;
+    }
+
+    // Student Profiles (secured by document ID matching auth.uid)
+    match /studentProfiles/{userId} {
+      allow read, write: if isSignedIn() && request.auth.uid == userId;
+
+      // Board snapshots belonging to this student
+      match /boardSnapshots/{snapshotId} {
+        allow read, write: if isSignedIn() && request.auth.uid == userId;
+      }
+    }
+
+    // Classroom Sessions
+    match /classSessions/{sessionId} {
+      // Only allow reading if the document belongs to the authenticated user
+      allow list, get: if isSignedIn() && (resource == null || resource.data.userId == request.auth.uid);
+      
+      // Only allow creation if the authenticated user is setting themselves as the owner
+      allow create: if isSignedIn() && request.resource.data.userId == request.auth.uid;
+      
+      // Only allow updating if the document belongs to the user and the ownership is not changed
+      allow update: if isSignedIn() && resource.data.userId == request.auth.uid && request.resource.data.userId == request.auth.uid;
+      
+      // Only allow deletion if the document belongs to the user
+      allow delete: if isSignedIn() && resource.data.userId == request.auth.uid;
+
+      // Dialogue Messages under class sessions
+      match /dialogueMessages/{messageId} {
+        // Only allow reading or writing dialogue messages belonging to the user's session
+        allow read, write: if isSignedIn() && (
+          get(/databases/$(database)/documents/classSessions/$(sessionId)).data.userId == request.auth.uid
+        );
+      }
+    }
+  }
+}
