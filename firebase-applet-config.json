@@ -1,10 +1,10 @@
 {
-  "projectId": "remixed-project-id",
-  "appId": "remixed-app-id",
-  "apiKey": "remixed-api-key",
-  "authDomain": "remixed-auth-domain",
+  "projectId": "custom-polymer-7tn3v",
+  "appId": "1:785486326080:web:c95ec6fbb942153a2672a5",
+  "apiKey": "AIzaSyD3woBgidY5GPrXRvhMvENgRUMABsOjUz0",
+  "authDomain": "custom-polymer-7tn3v.firebaseapp.com",
   "firestoreDatabaseId": "remixed-firestore-database-id",
-  "storageBucket": "remixed-storage-bucket",
-  "messagingSenderId": "remixed-messaging-sender-id",
-  "measurementId": "remixed-measurement-id"
+  "storageBucket": "custom-polymer-7tn3v.firebasestorage.app",
+  "messagingSenderId": "785486326080",
+  "measurementId": ""
 }
